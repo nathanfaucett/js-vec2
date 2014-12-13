@@ -5,12 +5,8 @@ var vec2 = module.exports;
 
 
 vec2.create = function(x, y) {
-    var v = new mathf.ArrayType(2);
 
-    v[0] = x !== undefined ? x : 0;
-    v[1] = y !== undefined ? y : 0;
-
-    return v;
+    return vec2.set(new mathf.ArrayType(2), x, y);
 };
 
 vec2.copy = function(a, b) {
