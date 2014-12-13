@@ -37,6 +37,8 @@ vec2.add = function(a, b, out) {
 };
 
 vec2.sub = function(a, b, out) {
+    out = out || a;
+
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
 
