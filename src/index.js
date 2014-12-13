@@ -321,34 +321,25 @@ vec2.transformProjection = function(a, m, out) {
     return out;
 };
 
-vec2.positionFromMat32 = function(a, m, out) {
-    out = out || a;
+vec2.positionFromMat32 = function(a, m) {
+    a[0] = m[4];
+    a[1] = m[5];
 
-    out[0] = m[4];
-    out[1] = m[5];
-
-    return out;
+    return a;
 };
 
-vec2.positionFromMat4 = function(a, m, out) {
-    out = out || a;
+vec2.positionFromMat4 = function(a, m) {
+    a[0] = m[12];
+    a[1] = m[13];
 
-    out[0] = m[12];
-    out[1] = m[13];
-
-    return out;
+    return a;
 };
 
-vec2.scaleFromMat2 = function(a, m, out) {
-    var x = vec2.length(vec2.set(m[0], m[2])),
-        y = vec2.length(vec2.set(me[1], m[3]));
+vec2.scaleFromMat2 = function(a, m) {
+    a[0] = vec2.length(vec2.set(a, m[0], m[2]));
+    a[1] = vec2.length(vec2.set(a, m[1], m[3]));
 
-    out = out || a;
-
-    out[0] = x;
-    out[1] = y;
-
-    return out;
+    return a;
 };
 
 vec2.scaleFromMat32 = vec2.scaleFromMat2;
