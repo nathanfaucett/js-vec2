@@ -362,3 +362,8 @@ vec2.notEqual = function(a, b) {
         a[1] !== b[1]
     );
 };
+
+vec2.str = function(out) {
+
+    return "Vec2(" + out[0] + ", " + out[1] + ")";
+};
