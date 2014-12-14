@@ -5,26 +5,40 @@ var vec2 = module.exports;
 
 
 vec2.create = function(x, y) {
+    var out = new mathf.ArrayType(2);
 
-    return vec2.set(new mathf.ArrayType(2), x, y);
+    out[0] = x !== undefined ? x : 0;
+    out[1] = y !== undefined ? y : 0;
+
+    return out;
 };
 
-vec2.copy = function(a, b) {
-    a[0] = b[0];
-    a[1] = b[1];
+vec2.copy = function(out, a) {
 
-    return a;
+    out[0] = a[0];
+    out[1] = a[1];
+
+    return out;
 };
 
-vec2.set = function(a, x, y) {
-    a[0] = x !== undefined ? x : 0;
-    a[1] = y !== undefined ? y : 0;
+vec2.clone = function(a) {
+    var out = new mathf.ArrayType(2);
 
-    return a;
+    out[0] = a[0];
+    out[1] = a[1];
+
+    return out;
 };
 
-vec2.add = function(a, b, out) {
-    out = out || a;
+vec2.set = function(out, x, y) {
+
+    out[0] = x !== undefined ? x : 0;
+    out[1] = y !== undefined ? y : 0;
+
+    return out;
+};
+
+vec2.add = function(out, a, b) {
 
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
@@ -32,8 +46,7 @@ vec2.add = function(a, b, out) {
     return a;
 };
 
-vec2.sub = function(a, b, out) {
-    out = out || a;
+vec2.sub = function(out, a, b) {
 
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
@@ -41,8 +54,7 @@ vec2.sub = function(a, b, out) {
     return out;
 };
 
-vec2.mul = function(a, b, out) {
-    out = out || a;
+vec2.mul = function(out, a, b) {
 
     out[0] = a[0] * b[0];
     out[1] = a[1] * b[1];
@@ -50,11 +62,9 @@ vec2.mul = function(a, b, out) {
     return out;
 };
 
-vec2.div = function(a, b, out) {
+vec2.div = function(out, a, b) {
     var bx = b[0],
         by = b[1];
-
-    out = out || a;
 
     out[0] = a[0] * (bx !== 0 ? 1 / bx : bx);
     out[1] = a[1] * (by !== 0 ? 1 / by : by);
@@ -62,8 +72,7 @@ vec2.div = function(a, b, out) {
     return out;
 };
 
-vec2.sadd = function(a, s, out) {
-    out = out || a;
+vec2.sadd = function(out, a, s) {
 
     out[0] = a[0] + s;
     out[1] = a[1] + s;
@@ -71,8 +80,7 @@ vec2.sadd = function(a, s, out) {
     return a;
 };
 
-vec2.ssub = function(a, s, out) {
-    out = out || a;
+vec2.ssub = function(out, a, s) {
 
     out[0] = a[0] - s;
     out[1] = a[1] - s;
@@ -80,8 +88,7 @@ vec2.ssub = function(a, s, out) {
     return out;
 };
 
-vec2.smul = function(a, s, out) {
-    out = out || a;
+vec2.smul = function(out, a, s) {
 
     out[0] = a[0] * s;
     out[1] = a[1] * s;
@@ -89,25 +96,40 @@ vec2.smul = function(a, s, out) {
     return out;
 };
 
-vec2.sdiv = function(a, s, out) {
+vec2.sdiv = function(out, a, s) {
     s = s !== 0 ? 1 / s : s;
 
-    out = out || a;
-
     out[0] = a[0] * s;
     out[1] = a[1] * s;
 
     return out;
 };
 
-vec2.dot = function(a, b) {
+vec2.lengthSqValues = function(x, y) {
 
-    return a[0] * b[0] + a[1] * b[1];
+    return x * x + y * y;
+};
+
+vec2.lengthValues = function(x, y) {
+    var lsq = vec2.lengthSqValues(x, y);
+
+    return lsq !== 0 ? mathf.sqrt(lsq) : lsq;
+};
+
+vec2.invLengthValues = function(x, y) {
+    var lsq = vec2.lengthSqValues(x, y);
+
+    return lsq !== 0 ? 1 / mathf.sqrt(lsq) : lsq;
 };
 
 vec2.cross = function(a, b) {
 
     return a[0] * b[1] - a[1] * b[0];
+};
+
+vec2.dot = function(a, b) {
+
+    return a[0] * b[0] + a[1] * b[1];
 };
 
 vec2.lengthSq = function(a) {
@@ -127,18 +149,29 @@ vec2.invLength = function(a) {
     return lsq !== 0 ? 1 / mathf.sqrt(lsq) : lsq;
 };
 
-vec2.setLength = function(a, length) {
+vec2.setLength = function(out, a, length) {
+    var x = a[0],
+        y = a[1],
+        s = length * vec2.invLengthValues(x, y);
 
-    return vec2.smul(a, vec2.invLength(a) * length);
+    out[0] = x * s;
+    out[1] = y * s;
+
+    return out;
 };
 
-vec2.normalize = function(a) {
+vec2.normalize = function(out, a) {
+    var x = a[0],
+        y = a[1],
+        invlsq = vec2.invLengthValues(x, y);
 
-    return vec2.sdiv(a, vec2.length(a));
+    out[0] = x * invlsq;
+    out[1] = y * invlsq;
+
+    return out;
 };
 
-vec2.inverse = function(a, out) {
-    out = out || a;
+vec2.inverse = function(out, a) {
 
     out[0] = a[0] * -1;
     out[1] = a[1] * -1;
@@ -146,10 +179,8 @@ vec2.inverse = function(a, out) {
     return out;
 };
 
-vec2.lerp = function(a, b, x, out) {
+vec2.lerp = function(out, a, b, x) {
     var lerp = mathf.lerp;
-
-    out = out || a;
 
     out[0] = lerp(a[0], b[0], x);
     out[1] = lerp(a[1], b[1], x);
@@ -157,8 +188,7 @@ vec2.lerp = function(a, b, x, out) {
     return out;
 };
 
-vec2.perp = function(a, out) {
-    out = out || a;
+vec2.perp = function(out, a) {
 
     out[0] = -a[1];
     out[1] = a[0];
@@ -166,8 +196,7 @@ vec2.perp = function(a, out) {
     return out;
 };
 
-vec2.perpL = function(a, out) {
-    out = out || a;
+vec2.perpL = function(out, a) {
 
     out[0] = a[1];
     out[1] = -a[0];
@@ -175,13 +204,11 @@ vec2.perpL = function(a, out) {
     return out;
 };
 
-vec2.min = function(a, b, out) {
+vec2.min = function(out, a, b) {
     var ax = a[0],
         ay = a[1],
         bx = b[0],
         by = b[1];
-
-    out = out || a;
 
     out[0] = bx < ax ? bx : ax;
     out[1] = by < ay ? by : ay;
@@ -189,13 +216,11 @@ vec2.min = function(a, b, out) {
     return out;
 };
 
-vec2.max = function(a, b, out) {
+vec2.max = function(out, a, b) {
     var ax = a[0],
         ay = a[1],
         bx = b[0],
         by = b[1];
-
-    out = out || a;
 
     out[0] = bx > ax ? bx : ax;
     out[1] = by > ay ? by : ay;
@@ -203,7 +228,7 @@ vec2.max = function(a, b, out) {
     return out;
 };
 
-vec2.clamp = function(a, min, max, out) {
+vec2.clamp = function(out, a, min, max) {
     var x = a[0],
         y = a[1],
         minx = min[0],
@@ -211,21 +236,17 @@ vec2.clamp = function(a, min, max, out) {
         maxx = max[0],
         maxy = max[1];
 
-    out = out || a;
-
     out[0] = x < minx ? minx : x > maxx ? maxx : x;
     out[1] = y < miny ? miny : y > maxy ? maxy : y;
 
     return out;
 };
 
-vec2.transformAngle = function(a, angle, out) {
+vec2.transformAngle = function(out, a, angle) {
     var x = a[0],
         y = a[1],
         c = mathf.cos(angle),
         s = mathf.sin(angle);
-
-    out = out || a;
 
     out[0] = x * c - y * s;
     out[1] = x * s + y * c;
@@ -233,11 +254,9 @@ vec2.transformAngle = function(a, angle, out) {
     return out;
 };
 
-vec2.transformMat2 = function(a, m, out) {
+vec2.transformMat2 = function(out, a, m) {
     var x = a[0],
         y = a[1];
-
-    out = out || a;
 
     out[0] = x * m[0] + y * m[2];
     out[1] = x * m[1] + y * m[3];
@@ -245,23 +264,9 @@ vec2.transformMat2 = function(a, m, out) {
     return out;
 };
 
-vec2.untransformMat2 = function(a, m, out) {
+vec2.transformMat32 = function(out, a, m) {
     var x = a[0],
         y = a[1];
-
-    out = out || a;
-
-    out[0] = x * m[0] + y * m[1];
-    out[1] = x * m[2] + y * m[3];
-
-    return out;
-};
-
-vec2.transformMat32 = function(a, m, out) {
-    var x = a[0],
-        y = a[1];
-
-    out = out || a;
 
     out[0] = x * m[0] + y * m[2] + m[4];
     out[1] = x * m[1] + y * m[3] + m[5];
@@ -269,23 +274,9 @@ vec2.transformMat32 = function(a, m, out) {
     return out;
 };
 
-vec2.untransformMat32 = function(a, m, out) {
-    var x = a[0] - m[4],
-        y = a[1] - m[5];
-
-    out = out || a;
-
-    out[0] = x * m[0] + y * m[1];
-    out[1] = x * m[2] + y * m[3];
-
-    return out;
-};
-
-vec2.transformMat3 = function(a, m, out) {
+vec2.transformMat3 = function(out, a, m) {
     var x = a[0],
         y = a[1];
-
-    out = out || a;
 
     out[0] = x * m[0] + y * m[3] + m[6];
     out[1] = x * m[1] + y * m[4] + m[7];
@@ -293,11 +284,9 @@ vec2.transformMat3 = function(a, m, out) {
     return out;
 };
 
-vec2.transformMat4 = function(a, m, out) {
+vec2.transformMat4 = function(out, a, m) {
     var x = a[0],
         y = a[1];
-
-    out = out || a;
 
     out[0] = x * m[0] + y * m[4] + m[12];
     out[1] = x * m[1] + y * m[5] + m[13];
@@ -305,13 +294,12 @@ vec2.transformMat4 = function(a, m, out) {
     return out;
 };
 
-vec2.transformProjection = function(a, m, out) {
+vec2.transformProjection = function(out, a, m) {
     var x = a[0],
         y = a[1],
-        d = m[3] * x + m[7] * y + m[11] + m[15];
+        d = x * m[3] + y * m[7] + m[11] + m[15];
 
     d = d !== 0 ? 1 / d : d;
-    out = out || a;
 
     out[0] = (x * m[0] + y * m[4] + m[12]) * d;
     out[1] = (x * m[1] + y * m[5] + m[13]) * d;
@@ -319,28 +307,47 @@ vec2.transformProjection = function(a, m, out) {
     return out;
 };
 
-vec2.positionFromMat32 = function(a, m) {
-    a[0] = m[4];
-    a[1] = m[5];
+vec2.positionFromMat32 = function(out, m) {
 
-    return a;
+    out[0] = m[4];
+    out[1] = m[5];
+
+    return out;
 };
 
-vec2.positionFromMat4 = function(a, m) {
-    a[0] = m[12];
-    a[1] = m[13];
+vec2.positionFromMat4 = function(out, m) {
 
-    return a;
+    out[0] = m[12];
+    out[1] = m[13];
+
+    return out;
 };
 
-vec2.scaleFromMat2 = function(a, m) {
-    a[0] = vec2.length(vec2.set(a, m[0], m[2]));
-    a[1] = vec2.length(vec2.set(a, m[1], m[3]));
+vec2.scaleFromMat2 = function(out, m) {
 
-    return a;
+    out[0] = vec2.lengthValues(m[0], m[2]);
+    out[1] = vec2.lengthValues(m[1], m[3]);
+
+    return out;
 };
 
 vec2.scaleFromMat32 = vec2.scaleFromMat2;
+
+vec2.scaleFromMat3 = function(out, m) {
+
+    out[0] = vec2.lengthValues(m[0], m[3]);
+    out[1] = vec2.lengthValues(m[1], m[4]);
+
+    return out;
+};
+
+vec2.scaleFromMat4 = function(out, m) {
+
+    out[0] = vec2.lengthValues(m[0], m[4]);
+    out[1] = vec2.lengthValues(m[1], m[5]);
+
+    return out;
+};
 
 vec2.equal = function(a, b) {
     return !(
