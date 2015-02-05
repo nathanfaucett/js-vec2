@@ -4,8 +4,14 @@ var mathf = require("mathf");
 var vec2 = module.exports;
 
 
-vec2.create = function(x, y) {
-    var out = new mathf.ArrayType(2);
+vec2.ArrayType = typeof(Float32Array) !== "undefined" ? Float32Array : mathf.ArrayType;
+
+
+vec2.create = function(x, y, ArrayType) {
+    var out;
+
+    ArrayType = ArrayType !== undefined ? ArrayType : vec2.ArrayType;
+    out = new ArrayType(2);
 
     out[0] = x !== undefined ? x : 0;
     out[1] = y !== undefined ? y : 0;
