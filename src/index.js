@@ -46,7 +46,7 @@ vec2.add = function(out, a, b) {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
 
-    return a;
+    return out;
 };
 
 vec2.sub = function(out, a, b) {
@@ -80,7 +80,7 @@ vec2.sadd = function(out, a, s) {
     out[0] = a[0] + s;
     out[1] = a[1] + s;
 
-    return a;
+    return out;
 };
 
 vec2.ssub = function(out, a, s) {
