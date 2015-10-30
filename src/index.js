@@ -1,4 +1,5 @@
-var mathf = require("mathf");
+var mathf = require("mathf"),
+    isNumber = require("is_number");
 
 
 var vec2 = exports;
@@ -10,8 +11,8 @@ vec2.ArrayType = typeof(Float32Array) !== "undefined" ? Float32Array : mathf.Arr
 vec2.create = function(x, y) {
     var out = new vec2.ArrayType(2);
 
-    out[0] = x !== undefined ? x : 0;
-    out[1] = y !== undefined ? y : 0;
+    out[0] = isNumber(x) ? x : 0;
+    out[1] = isNumber(y) ? y : 0;
 
     return out;
 };
@@ -35,8 +36,8 @@ vec2.clone = function(a) {
 
 vec2.set = function(out, x, y) {
 
-    out[0] = x !== undefined ? x : 0;
-    out[1] = y !== undefined ? y : 0;
+    out[0] = isNumber(x) ? x : 0;
+    out[1] = isNumber(y) ? y : 0;
 
     return out;
 };
@@ -109,46 +110,38 @@ vec2.sdiv = function(out, a, s) {
 };
 
 vec2.lengthSqValues = function(x, y) {
-
     return x * x + y * y;
 };
 
 vec2.lengthValues = function(x, y) {
     var lsq = vec2.lengthSqValues(x, y);
-
     return lsq !== 0 ? mathf.sqrt(lsq) : lsq;
 };
 
 vec2.invLengthValues = function(x, y) {
     var lsq = vec2.lengthSqValues(x, y);
-
     return lsq !== 0 ? 1 / mathf.sqrt(lsq) : lsq;
 };
 
 vec2.cross = function(a, b) {
-
     return a[0] * b[1] - a[1] * b[0];
 };
 
 vec2.dot = function(a, b) {
-
     return a[0] * b[0] + a[1] * b[1];
 };
 
 vec2.lengthSq = function(a) {
-
     return vec2.dot(a, a);
 };
 
 vec2.length = function(a) {
     var lsq = vec2.lengthSq(a);
-
     return lsq !== 0 ? mathf.sqrt(lsq) : lsq;
 };
 
 vec2.invLength = function(a) {
     var lsq = vec2.lengthSq(a);
-
     return lsq !== 0 ? 1 / mathf.sqrt(lsq) : lsq;
 };
 
@@ -367,6 +360,7 @@ vec2.notEqual = function(a, b) {
 };
 
 vec2.str = function(out) {
-
     return "Vec2(" + out[0] + ", " + out[1] + ")";
 };
+
+vec2.string = vec2.toString = vec2.str;
