@@ -1,5 +1,5 @@
-var mathf = require("mathf"),
-    isNumber = require("is_number");
+var mathf = require("@nathanfaucett/mathf"),
+    isNumber = require("@nathanfaucett/is_number");
 
 
 var vec2 = exports;
@@ -198,6 +198,10 @@ vec2.perpR = function(out, a) {
     out[1] = a[0];
 
     return out;
+};
+
+vec2.angle = function(a, b) {
+    return Math.acos(vec2.dot(a, b) / (vec2.length(a) * vec2.length(b)));
 };
 
 vec2.min = function(out, a, b) {
