@@ -17,6 +17,15 @@ vec2.create = function(x, y) {
     return out;
 };
 
+vec2.up = vec2.forward = vec2.create(0.0, 1.0);
+vec2.down = vec2.backward = vec2.create(0.0, -1.0);
+
+vec2.right = vec2.create(1.0, 0.0);
+vec2.left = vec2.create(-1.0, 0.0);
+
+vec2.zero = vec2.create(0.0, 0.0);
+vec2.one = vec2.create(1.0, 1.0);
+
 vec2.copy = function(out, a) {
 
     out[0] = a[0];
@@ -169,8 +178,8 @@ vec2.normalize = function(out, a) {
 
 vec2.inverse = function(out, a) {
 
-    out[0] = a[0] * -1;
-    out[1] = a[1] * -1;
+    out[0] = -a[0];
+    out[1] = -a[1];
 
     return out;
 };
@@ -184,7 +193,7 @@ vec2.lerp = function(out, a, b, x) {
     return out;
 };
 
-vec2.perp = function(out, a) {
+vec2.perpL = function(out, a) {
 
     out[0] = a[1];
     out[1] = -a[0];
@@ -334,32 +343,45 @@ vec2.scaleFromMat2 = function(out, m) {
 vec2.scaleFromMat32 = vec2.scaleFromMat2;
 
 vec2.scaleFromMat3 = function(out, m) {
+    var m11 = m[0],
+        m21 = m[3],
+        m31 = m[6],
+        m12 = m[1],
+        m22 = m[4],
+        m32 = m[7],
+        x = m11 * m11 + m21 * m21 + m31 * m31,
+        y = m12 * m12 + m22 * m22 + m32 * m32;
 
-    out[0] = vec2.lengthValues(m[0], m[3]);
-    out[1] = vec2.lengthValues(m[1], m[4]);
+    out[0] = x !== 0 ? Math.sqrt(x) : 0;
+    out[1] = y !== 0 ? Math.sqrt(y) : 0;
 
     return out;
 };
 
 vec2.scaleFromMat4 = function(out, m) {
+    var m11 = m[0],
+        m21 = m[4],
+        m31 = m[8],
+        m12 = m[1],
+        m22 = m[5],
+        m32 = m[9],
+        x = m11 * m11 + m21 * m21 + m31 * m31,
+        y = m12 * m12 + m22 * m22 + m32 * m32;
 
-    out[0] = vec2.lengthValues(m[0], m[4]);
-    out[1] = vec2.lengthValues(m[1], m[5]);
+    out[0] = x !== 0 ? Math.sqrt(x) : 0;
+    out[1] = y !== 0 ? Math.sqrt(y) : 0;
 
     return out;
 };
 
-vec2.equal = function(a, b) {
-    return !(
-        a[0] !== b[0] ||
-        a[1] !== b[1]
-    );
+vec2.equals = function(a, b) {
+    return !vec2.notEquals(a, b);
 };
 
-vec2.notEqual = function(a, b) {
-    return (
-        a[0] !== b[0] ||
-        a[1] !== b[1]
+vec2.notEquals = function(a, b) {
+    return !(
+        mathf.equals(a[0], b[0]) ||
+        mathf.equals(a[1], b[1])
     );
 };
 
